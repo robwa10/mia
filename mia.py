@@ -11,9 +11,14 @@ single_report = []
 for i in rows:
     final_data.append(i.split(','))
 
-for i in final_data:
-    trial = i[0]
-    if trial not in single_report:
-        single_report.append(i)
+del final_data[0] # Delete header row
 
-print(single_report[:11])
+#for i in rows:
+#    final_data =  datetime.datetime.strptime(i[2], "%m/%d/%Y").strftime("%m/%d/%Y")
+
+#for i in final_data:
+#    trial = i[0]
+#    if trial not in single_report:
+#        single_report.append(i)
+
+print(final_data[:11])
