@@ -6,17 +6,20 @@ import datetime
 
 f = open("feb2017.csv", "r").read()
 rows = f.split('\n')
+del rows[0] # Delete header row
 
 date_format = "%m-%d-%Y"
 final_data = []
+full_name = []
+date = []
 
-for i in rows:
-    final_data.append(i.split(','))
+#for i in rows:
+#    final_data.append(i.split(','))
 
-del final_data[0] # Delete header row
+#del final_data[0] # Delete header row
 
-for i in final_data:
-    i[2] = datetime.datetime.strptime(i[2], "%m/%d/%Y").strftime(date_format)
+#for i in final_data:
+#    i[2] = datetime.datetime.strptime(i[2], "%m/%d/%Y").strftime(date_format)
 
 
 #for i in final_data:
@@ -28,14 +31,13 @@ for i in final_data:
 # -------------------------------------------------------------
 # This is the sandbox area to test.
 
-eric = final_data[:10]
-temp = []
+for i in rows:
+    full_name.append(i[0] + i[1])
+#    date = datetime.datetime.strptime(i[2], "%m/%d/%Y").strftime(date_format)
 
-for i in eric:
-    temp.append(i[2])
-
+print(full_name[:20])
+#print(date[:20])
 
 # End of sandbox area
 # -------------------------------------------------------------
 
-print(final_data[:20])
