@@ -1,3 +1,4 @@
+#------------------------ This is 79 characters--------------------------------
 import csv
 import datetime
 
@@ -32,8 +33,6 @@ temp = []
 for i in eric:
     temp.append(i[2])
 
-#for i in eric:
-#    temp.append(datetime.datetime.strptime(i[2], "%m/%d/%Y").strftime(date_format))
 
 # End of sandbox area
 # -------------------------------------------------------------
