@@ -31,4 +31,4 @@ for i in rows:
             dict_errors += 1
 
 print(final_data)
-print("Total errors when compiling dictionary: %d" %  dict_errors)
+print("Total errors when compiling dictionary: %d" % dict_errors)
