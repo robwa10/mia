@@ -9,12 +9,23 @@ rows = f.split('\n')
 del rows[0] # Delete header row
 
 date_format = "%m-%d-%Y"
-final_data = []
+data = []
 full_name = []
 date = []
+final_data = dict()
 
-#for i in rows:
-#    final_data.append(i.split(','))
+for i in rows:
+    data.append(i.split(','))
+
+for i in data:
+    date = datetime.datetime.strptime(i[2], "%m/%d/%Y").strftime(date_format)
+    name = i[0] + " " + i[1]
+    if name in final_data:
+        final_data[name] = final_data[name] + date
+    else:
+        final_data[name] = date 
+
+print(final_data)
 
 #del final_data[0] # Delete header row
 
@@ -31,11 +42,6 @@ date = []
 # -------------------------------------------------------------
 # This is the sandbox area to test.
 
-for i in rows:
-    full_name.append(i[0] + i[1])
-#    date = datetime.datetime.strptime(i[2], "%m/%d/%Y").strftime(date_format)
-
-print(full_name[:20])
 #print(date[:20])
 
 # End of sandbox area
