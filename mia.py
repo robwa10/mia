@@ -2,15 +2,28 @@
 import datetime
 import csv
 
-f = open("feb2017.csv", "r").read()
-rows = f.split('\n')
-del rows[0]  # Delete header row
 
 date_format = "%m-%d-%Y"
 final_data = dict()
 dict_errors = 0
 master_list = []
-w = csv.writer(open("output.csv", "w"))
+w = csv.writer(open("master_list.csv", "w"))
+
+# User input of master file, open, read and split on ','
+x = input('master filename >')
+master_file = file_input(x)
+
+"""
+# User input of comparison file, open, read, split and delete header row
+secondary_file = input('comparison filename >')
+comp_file = file_input(secondary_file)
+del comp_file[0]
+"""
+
+def file_input(a_file):
+    f = open(a_file, "r").read()
+    f = f.split("\n")
+    return f
 
 for i in rows:
     data = [i.split(',')]
@@ -31,11 +44,9 @@ for i in rows:
         else:
             dict_errors += 1
 
-for person, info in final_data.items():
-    w.writerow([person, info['date'], info['total']])
+# for person, info in final_data.items():
+#    w.writerow([person, info['date'], info['total']])
 #    master_list.append([person, info['date'], info['total']])
 
 # tf = open("attendance_data.txt", "w")
 # tf.close()
-#for key, val in final_data.items():
-#    w.writerow([key, val])
