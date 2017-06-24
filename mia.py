@@ -9,44 +9,58 @@ dict_errors = 0
 master_list = []
 w = csv.writer(open("master_list.csv", "w"))
 
+
+
+def parse_file(a_file, x, secondary=True):
+    data_dict = dict()
+    f = open(a_file, "r").read()
+    #print("f is:")
+    #print(f)
+    e = f.split("\n")
+    #print("e is:")
+    #print(e)
+    for i in e:
+        data = [i.split(',')]
+        if secondary == True:
+            for i in data:
+                i[x] = datetime.datetime.strptime(
+                    i[x], "%m/%d/%Y"
+                    ).strftime(date_format)
+                name = i[1] + ' ' + i[0]
+                if name in data_dict:
+                    if data_dict[name]['last attendance'] < i[x]:
+                       data_dict[name]['last attendance'] = i[x]
+                    data_dict[name]['total'] += 1
+                elif name not in data_dict:
+                    data_dict[name] = {
+                        'last attendance': i[x],
+                        'total': 1
+                        }
+                else:
+                    dict_errors += 1
+        else:
+            data_dict[i[0]] = {
+                'date': i[1],
+                'total': i[2]
+                }
+    return data_dict
+
+
 # User input of master file, open, read and split on ','
-x = input('master filename >')
-master_file = file_input(x)
+master = input('master filename >')
+master_data = parse_file(master, 1, secondary=False)
+
+print(master_data)
 
 """
 # User input of comparison file, open, read, split and delete header row
 secondary_file = input('comparison filename >')
-comp_file = file_input(secondary_file)
-del comp_file[0]
+comp_file = parse_file(secondary_file, 2)
+
+print(comp_file)
+
+for person, info in comp_file.items():
+   w.writerow([person, info['last attendance'], info['total']])
 """
-
-def file_input(a_file):
-    f = open(a_file, "r").read()
-    f = f.split("\n")
-    return f
-
-for i in rows:
-    data = [i.split(',')]
-    for i in data:
-        i[2] = datetime.datetime.strptime(
-            i[2], "%m/%d/%Y"
-            ).strftime(date_format)  # Change string to date format
-        name = i[0] + ' ' + i[1]
-        if name in final_data:
-            if final_data[name]['date'] < i[2]:
-                final_data[name]['date'] = i[2]
-            final_data[name]['total'] = final_data[name]['total'] + 1
-        elif name not in final_data:
-            final_data[name] = {
-                'date': i[2],
-                'total': 1
-                }
-        else:
-            dict_errors += 1
-
-# for person, info in final_data.items():
-#    w.writerow([person, info['date'], info['total']])
-#    master_list.append([person, info['date'], info['total']])
-
 # tf = open("attendance_data.txt", "w")
 # tf.close()
