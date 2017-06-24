@@ -3,7 +3,7 @@ import datetime
 import csv
 
 
-date_format = "%m-%d-%Y"
+date_format = "%m/%d/%Y"
 final_data = dict()
 dict_errors = 0
 master_list = []
@@ -18,25 +18,20 @@ def prep_file(a_file):
     for i in rows:
         new = i.split(',')
         final_data.append(new)
+    print("This is the final_data list.")
+    print(final_data)
     return final_data
-    
+
+def format_date(data):
+    for i in data:
+        i[2] = datetime.datetime.strptime(
+            i[2], date_format).strftime(date_format)
+    print("\n\n\nThis is the data list after time formatting.")
+    print(data)
+    return data
     
 """
 def parse_file(a_file, x, secondary=True):
-    data_dict = dict()
-    f = open(a_file, "r").read()
-    print("f is:")
-    print(f)
-    e = f.split("\n")
-    print("e is:")
-    print(e)
-    for i in e:
-        data = [i.split(',')]
-        if secondary == True:
-            for i in data:
-                i[x] = datetime.datetime.strptime(
-                    i[x], "%m/%d/%Y"
-                    ).strftime(date_format)
                 name = i[1] + ' ' + i[0]
                 if name in data_dict:
                     if data_dict[name]['last attendance'] < i[x]:
@@ -64,13 +59,14 @@ def parse_file(a_file, x, secondary=True):
 # User input of comparison file, open, read, split and delete header row
 secondary_file = input('comparison filename >')
 comp_file = prep_file(secondary_file)
-
+comp_date = format_date(comp_file)
 print("The secondary data was returned.")
+print(comp_date)
+
 
 """
 for person, info in comp_file.items():
    w.writerow([person, info['last attendance'], info['total']])
-"""
 
 # User input of master file, open, read and split on ','
 master = input('master filename >')
@@ -79,6 +75,7 @@ master_data = prep_file(master)
 
 print("The master data was returned.")
 print(master_data)
+"""
 
 # tf = open("attendance_data.txt", "w")
 # tf.close()
