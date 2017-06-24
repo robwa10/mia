@@ -13,9 +13,8 @@ w = csv.writer(open("master_list", "w"))
 def prep_file(a_file):
     """Read and split the csv on newline and comma and add to a list."""
     final_data = []
-    f = open(a_file, 'r')
-    data = f.read()
-    rows = data.split('\n')
+    f = open(a_file, 'r').read()
+    rows = f.split('\n')
     for i in rows:
         new = i.split(',')
         final_data.append(new)
