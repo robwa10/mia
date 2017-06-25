@@ -5,7 +5,7 @@ This program is used to parse csv files and compare the data for attendance trac
 Here is what it does:
 1.  User inputs a csv. Specifying which columns contain first name, last name and date.
 2. Parses the csv, turning the data into a dictionary.
-3. User inputs a master csv, which has been outputted by the program in the past.
+3. User inputs a master csv, again speciying columns.
 4. Parses the csv into a dictionary.
 5. Compares the two dictionaries.
 6. Produces a .txt file with anyone who hasn't attended in the last two weeks.
