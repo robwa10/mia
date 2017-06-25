@@ -4,7 +4,6 @@ import csv
 
 
 date_format = "%m/%d/%Y"
-final_data = dict()
 dict_errors = 0
 master_list = []
 w = csv.writer(open("master_list", "w"))
@@ -12,56 +11,55 @@ w = csv.writer(open("master_list", "w"))
 
 def prep_file(a_file):
     """Read and split the csv on newline and comma and add to a list."""
-    final_data = []
+    bar = []
     f = open(a_file, 'r').read()
     rows = f.split('\n')
     for i in rows:
         new = i.split(',')
-        final_data.append(new)
-    print("This is the final_data list.")
-    print(final_data)
-    return final_data
+        bar.append(new)
+    #print("This is the a_dict list.")
+    #print(a_dict)
+    return bar
 
-def format_date(data):
-    for i in data:
-        i[2] = datetime.datetime.strptime(
-            i[2], date_format).strftime(date_format)
-    print("\n\n\nThis is the data list after time formatting.")
-    print(data)
-    return data
-    
-"""
-def parse_file(a_file, x, secondary=True):
-                name = i[1] + ' ' + i[0]
-                if name in data_dict:
-                    if data_dict[name]['last attendance'] < i[x]:
-                       data_dict[name]['last attendance'] = i[x]
-                    data_dict[name]['total'] += 1
-                elif name not in data_dict:
-                    data_dict[name] = {
-                        'last attendance': i[x],
-                        'total': 1
-                        }
-                else:
-                    dict_errors += 1
+def format_date(foo, n):
+    """Format the dates in each list for comparison later."""
+    for i in foo:
+        i[n] = datetime.datetime.strptime(
+            i[n], date_format).strftime(date_format)
+    #print("\n\n\nThis is the data list after time formatting.")
+    #print(data)
+    return foo
+
+def comparison_dict(a, fir, las, dt):
+    a_dict = dict()
+    for i in a:
+        name = i[fir] + ' ' + i[las]
+        if name in a_dict:
+            if a_dict[name]['last attendance'] < i[dt]:
+                a_dict[name]['last attendance'] = i[dt]
+            a_dict[name]['total'] += 1
+        elif name not in a_dict:
+            a_dict[name] = {
+                'last attendance': i[dt],
+                'total': 1
+                }
         else:
-            for i in data:
-                i[x] = datetime.datetime.strptime(
-                    i[x], "%m-%d-%Y"
-                    ).strftime(date_format)
-                data_dict[i[0]] = {
-                    'date': i[1],
-                    'total': i[2]
-                    }
-    return data_dict
-"""
+            dict_errors += 1
+    return a_dict
 
 # User input of comparison file, open, read, split and delete header row
 secondary_file = input('comparison filename >')
+sec_fir_name = input('First Name column (e.g. 1,2,3...) >')
+sec_fir = int(sec_fir_name) - 1
+sec_las_name = input('Last Name column (e.g. 1,2,3...) >')
+sec_las = int(sec_las_name) - 1
+sec_date_col = input('Date column (e.g. 1,2,3...) >')
+sec_date = int(sec_date_col) - 1 
 comp_file = prep_file(secondary_file)
-comp_date = format_date(comp_file)
-print("The secondary data was returned.")
-print(comp_date)
+new_data = format_date(comp_file, sec_date)
+sec_dict = comparison_dict(new_data, sec_fir, sec_las, sec_date)
+print("The data was returned.")
+print(sec_dict)
 
 
 """
