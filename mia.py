@@ -3,10 +3,9 @@ import datetime
 import csv
 
 
+# Global Variables
 date_format = "%m/%d/%Y"
 dict_errors = 0
-master_list = []
-w = csv.writer(open("master_list", "w"))
 
 
 def prep_file(a_file):
@@ -21,6 +20,7 @@ def prep_file(a_file):
     #print(a_dict)
     return bar
 
+
 def format_date(foo, n):
     """Format the dates in each list for comparison later."""
     for i in foo:
@@ -30,8 +30,10 @@ def format_date(foo, n):
     #print(data)
     return foo
 
+
 def comparison_dict(a, fir, las, dt):
-    a_dict = dict()
+    """Turn the list into a dictionary of dictionaries."""
+    a_dict = {} 
     for i in a:
         name = i[fir] + ' ' + i[las]
         if name in a_dict:
@@ -47,7 +49,8 @@ def comparison_dict(a, fir, las, dt):
             dict_errors += 1
     return a_dict
 
-# User input of comparison file, open, read, split and delete header row
+
+# User input of comparison file
 secondary_file = input('comparison filename >')
 sec_fir_name = input('First Name column (e.g. 1,2,3...) >')
 sec_fir = int(sec_fir_name) - 1
@@ -58,22 +61,11 @@ sec_date = int(sec_date_col) - 1
 comp_file = prep_file(secondary_file)
 new_data = format_date(comp_file, sec_date)
 sec_dict = comparison_dict(new_data, sec_fir, sec_las, sec_date)
-print("The data was returned.")
-print(sec_dict)
-
 
 """
+w = csv.writer(open("master_list", "w"))
 for person, info in comp_file.items():
    w.writerow([person, info['last attendance'], info['total']])
-
-# User input of master file, open, read and split on ','
-master = input('master filename >')
-master_data = prep_file(master)
-#master_data = master_data.pop()
-
-print("The master data was returned.")
-print(master_data)
 """
-
-# tf = open("attendance_data.txt", "w")
-# tf.close()
+print("You're files are waiting on you!")
+print("You're total errors in creating dictionaries were %d." % dict_errors)
