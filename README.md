@@ -15,4 +15,3 @@ Here is what it does:
     - First Name
     - Last Name
     - Date last attended
-    - Total number of attendances
