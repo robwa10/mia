@@ -2,16 +2,33 @@
 
 import datetime
 import csv
+import xlsxwriter
 
 
 # Global Variables
 date_format = "%m/%d/%y"
 date_long = "%m/%d/%Y"
 today = datetime.datetime.today() 
+file_date = datetime.datetime.today().strftime(date_long)
 m_dict = {}
 two_weeks = {}
 four_weeks = {}
 four_plus = {}
+workbook = xlsxwriter.Workbook('MIA_Contact_List.xlsx')
+sheet1 = workbook.add_worksheet('Two_Weeks')
+sheet2 = workbook.add_worksheet('Four_Weeks')
+sheet3 = workbook.add_worksheet('Four_Plus_Weeks')
+row = 0
+col = 0
+
+
+def write_xl(my_dict, sheet):
+    row = 0
+    col = 0
+    for k, v in sorted(my_dict.items()):
+        sheet.write(row, col, k)
+        sheet.write(row, col + 1, v)
+        row += 1
 
 
 def prep_file(a_file, n, d):
@@ -79,6 +96,8 @@ comp_dict = dict_create(comp_file, sec_fir, sec_las, sec_date)
 
 compare()
 
-print("two_weeks: %r" % two_weeks)
-print("four_weeks: %r" % four_weeks)
-print("four_plus: %r" % four_plus)
+write_xl(two_weeks, sheet1)
+write_xl(four_weeks, sheet2)
+write_xl(four_plus, sheet3)
+
+workbook.close()
