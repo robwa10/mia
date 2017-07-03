@@ -3,13 +3,13 @@
 import datetime
 import csv
 import xlsxwriter
+import answervalid as av
 
 
 # Global Variables
 date_format = "%m/%d/%y"
 date_long = "%m/%d/%Y"
 today = datetime.datetime.today() 
-file_date = datetime.datetime.today().strftime(date_long)
 m_dict = {}
 two_weeks = {}
 four_weeks = {}
@@ -18,8 +18,6 @@ workbook = xlsxwriter.Workbook('MIA_Contact_List.xlsx')
 sheet1 = workbook.add_worksheet('Two_Weeks')
 sheet2 = workbook.add_worksheet('Four_Weeks')
 sheet3 = workbook.add_worksheet('Four_Plus_Weeks')
-row = 0
-col = 0
 
 
 def write_xl(my_dict, sheet):
@@ -70,34 +68,49 @@ def compare():
             two_weeks[k] = m_dict[k]['last attendance']
         elif diff > 29 and diff < 32:
             four_weeks[k] = m_dict[k]['last attendance']
-        elif diff > 32:
+        elif diff > 31:
             four_plus[k] = m_dict[k]['last attendance']
 
 
+def write_files():
+    write_xl(two_weeks, sheet1)
+    write_xl(four_weeks, sheet2)
+    write_xl(four_plus, sheet3)
+    w = csv.writer(open('master_list.csv', 'w'))
+    for k, v in sorted(m_dict.items()):
+        w.writerow([k, v['last attendance']])
+
+
+def file_vars():
+    a_file = input('Filename >')
+    fir = int(input('First Name column (e.g. 1,2,3...) >')) - 1
+    las = int(input('Last Name column (e.g. 1,2,3...) >')) - 1
+    file_date = int(input('Date column (e.g. 1,2,3...) >')) - 1
+    mas_file = prep_file(a_file, file_date, date_long )
+    dict_create(mas_file, fir, las, file_date)
+
+
 # User input of master file
-master_file = input('Master filename >')
-mas_name = 0
-mas_date = 1
-# Parsing and turning the master file into a dictionary
-master_data = prep_file(master_file, mas_date, date_format)
-master_dict(master_data, mas_name, mas_date)
+print("Do you have a master file?")
+choice = av.yes_no()
+if choice == 'y':
+    master_file = input('Master filename >')
+    mas_name = 0
+    mas_date = 1
+    # Parsing and turning the master file into a dictionary
+    master_data = prep_file(master_file, mas_date, date_format)
+    master_dict(master_data, mas_name, mas_date)
+if choice == 'n':
+    file_vars()
 
-# User input of comparison file
-comparison_file = input('New filename >')
-sec_fir_name = input('First Name column (e.g. 1,2,3...) >')
-sec_fir = int(sec_fir_name) - 1
-sec_las_name = input('Last Name column (e.g. 1,2,3...) >')
-sec_las = int(sec_las_name) - 1
-sec_date_col = input('Date column (e.g. 1,2,3...) >')
-sec_date = int(sec_date_col) - 1
-# Parsing and turning the comparison file into a dictionary
-comp_file = prep_file(comparison_file, sec_date, date_long)
-comp_dict = dict_create(comp_file, sec_fir, sec_las, sec_date)
+# Input of new data
+print("Load another file to update master list?")
+choice = av.yes_no()
+if choice == 'y':
+    file_vars()
+    compare()
+else:
+    compare()
 
-compare()
-
-write_xl(two_weeks, sheet1)
-write_xl(four_weeks, sheet2)
-write_xl(four_plus, sheet3)
-
+write_files()
 workbook.close()
