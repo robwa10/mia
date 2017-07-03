@@ -14,19 +14,21 @@ m_dict = {}
 two_weeks = {}
 four_weeks = {}
 four_plus = {}
+master = {}
 workbook = xlsxwriter.Workbook('MIA_Contact_List.xlsx')
-sheet1 = workbook.add_worksheet('Two_Weeks')
-sheet2 = workbook.add_worksheet('Four_Weeks')
-sheet3 = workbook.add_worksheet('Four_Plus_Weeks')
+sheet1 = workbook.add_worksheet('Master_List')
+sheet2 = workbook.add_worksheet('Two_Weeks')
+sheet3 = workbook.add_worksheet('Four_Weeks')
+sheet4 = workbook.add_worksheet('Four_Plus_Weeks')
 
 
-def write_xl(my_dict, sheet):
-    row = 0
-    col = 0
-    for k, v in sorted(my_dict.items()):
-        sheet.write(row, col, k)
-        sheet.write(row, col + 1, v)
-        row += 1
+def file_vars():
+    a_file = input('Filename >')
+    fir = int(input('First Name column (e.g. 1,2,3...) >')) - 1
+    las = int(input('Last Name column (e.g. 1,2,3...) >')) - 1
+    file_date = int(input('Date column (e.g. 1,2,3...) >')) - 1
+    mas_file = prep_file(a_file, file_date, date_long )
+    dict_create(mas_file, fir, las, file_date)
 
 
 def prep_file(a_file, n, d):
@@ -62,32 +64,30 @@ def master_dict(d, c, f):
 def compare():
     for k in m_dict:
         m_date = m_dict[k]['last attendance']
-        m_date = datetime.datetime.strptime(m_date, date_long)
-        diff = (today - m_date).days
+        new_date = datetime.datetime.strptime(m_date, date_long)
+        diff = (today - new_date).days
         if diff > 13 and diff < 16:
-            two_weeks[k] = m_dict[k]['last attendance']
+            two_weeks[k] = m_date
         elif diff > 29 and diff < 32:
-            four_weeks[k] = m_dict[k]['last attendance']
+            four_weeks[k] = m_date
         elif diff > 31:
-            four_plus[k] = m_dict[k]['last attendance']
-
+            four_plus[k] = m_date
+        master[k] = m_date
 
 def write_files():
-    write_xl(two_weeks, sheet1)
-    write_xl(four_weeks, sheet2)
-    write_xl(four_plus, sheet3)
-    w = csv.writer(open('master_list.csv', 'w'))
-    for k, v in sorted(m_dict.items()):
-        w.writerow([k, v['last attendance']])
+    write_xl(master, sheet1)
+    write_xl(two_weeks, sheet2)
+    write_xl(four_weeks, sheet3)
+    write_xl(four_plus, sheet4)
 
 
-def file_vars():
-    a_file = input('Filename >')
-    fir = int(input('First Name column (e.g. 1,2,3...) >')) - 1
-    las = int(input('Last Name column (e.g. 1,2,3...) >')) - 1
-    file_date = int(input('Date column (e.g. 1,2,3...) >')) - 1
-    mas_file = prep_file(a_file, file_date, date_long )
-    dict_create(mas_file, fir, las, file_date)
+def write_xl(my_dict, sheet):
+    row = 0
+    col = 0
+    for k, v in sorted(my_dict.items()):
+        sheet.write(row, col, k)
+        sheet.write(row, col + 1, v)
+        row += 1
 
 
 # User input of master file
@@ -98,7 +98,7 @@ if choice == 'y':
     mas_name = 0
     mas_date = 1
     # Parsing and turning the master file into a dictionary
-    master_data = prep_file(master_file, mas_date, date_format)
+    master_data = prep_file(master_file, mas_date, date_long)
     master_dict(master_data, mas_name, mas_date)
 if choice == 'n':
     file_vars()
@@ -114,3 +114,4 @@ else:
 
 write_files()
 workbook.close()
+print("You're files are waiting for you.")
