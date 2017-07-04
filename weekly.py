@@ -16,10 +16,10 @@ four_weeks = {}
 four_plus = {}
 master = {}
 workbook = xlsxwriter.Workbook('MIA_Contact_List.xlsx')
-sheet1 = workbook.add_worksheet('Master_List')
-sheet2 = workbook.add_worksheet('Two_Weeks')
-sheet3 = workbook.add_worksheet('Four_Weeks')
-sheet4 = workbook.add_worksheet('Four_Plus_Weeks')
+sheet4 = workbook.add_worksheet('Master_List')
+sheet1 = workbook.add_worksheet('Two_Weeks')
+sheet2 = workbook.add_worksheet('Four_Weeks')
+sheet3 = workbook.add_worksheet('Four_Plus_Weeks')
 
 
 def file_vars():
@@ -75,10 +75,10 @@ def compare():
         master[k] = m_date
 
 def write_files():
-    write_xl(master, sheet1)
-    write_xl(two_weeks, sheet2)
-    write_xl(four_weeks, sheet3)
-    write_xl(four_plus, sheet4)
+    write_xl(master, sheet4)
+    write_xl(two_weeks, sheet1)
+    write_xl(four_weeks, sheet2)
+    write_xl(four_plus, sheet3)
 
 
 def write_xl(my_dict, sheet):
