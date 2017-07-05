@@ -9,10 +9,10 @@ Here is what it does:
 4. Parses the csv and adds the data to the dictionary.
 5. Compares the dates in the dictionary to today's date, appending the data to specific dicitionaries based on length between last attendance and today's date.
 6. Writes an .xlsx file with the following sheets.
-    1. Anyone who hasn't attended in the last two weeks.
-    2. Anyone who hasn't attend in the last four weeks.
-    3. Anyone who hasn't attended in over four weeks.
-    4. All attendance data.
+    - Anyone who hasn't attended in the last two weeks.
+    - Anyone who hasn't attend in the last four weeks.
+    - Anyone who hasn't attended in over four weeks.
+    - All attendance data.
 7. Writes a new master attendance .csv file for future comparion that contains:
     - Full Name
     - Date last attended
