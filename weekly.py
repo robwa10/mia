@@ -101,7 +101,17 @@ def write_files():
     write_xl(master, sheet4)
     for k, v in sorted(master.items()):
         w.writerow([k, v])
+    workbook.close()
     return w, m
+
+
+def write_xl(my_dict, sheet):
+    row = 0
+    col = 0
+    for k, v in sorted(my_dict.items()):
+        sheet.write(row, col, k)
+        sheet.write(row, col + 1, v)
+        row += 1
 
 
 # User input of master file
@@ -126,5 +136,4 @@ else:
     compare()
 
 write_files()
-workbook.close()
 print("You're files are waiting for you.")
