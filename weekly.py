@@ -121,7 +121,7 @@ if choice == 'y':
     master_file = input('Master filename >')
     mas_name = 0
     mas_date = 1
-    master_data = prep_file(master_file, mas_date, date_short)
+    master_data = prep_file(master_file, mas_date, date_long, header=False)
     master_dict(master_data, mas_name, mas_date)
 if choice == 'n':
     file_vars()
