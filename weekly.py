@@ -1,5 +1,6 @@
 # ----------------------- This is 79 characters -------------------------------
-
+from dateutil.parser import *
+from dateutil.tz import *
 import datetime
 import csv
 import xlsxwriter
@@ -23,34 +24,34 @@ def file_vars():
     fir = int(input('First Name column (e.g. 1,2,3...) >')) - 1
     las = int(input('Last Name column (e.g. 1,2,3...) >')) - 1
     file_date = int(input('Date column (e.g. 1,2,3...) >')) - 1
-    date_type = input('Is your date format 2 (17) or 4 (2017) numbers long?')
-    if int(date_type) == 2:
-        x = date_short
-    else:
-        x = date_long
     print('Does your file have a header?')
     choice = av.yes_no()
     if choice == 'y':
         header = True
     else:
         header = False
-    mas_file = prep_file(a_file, file_date, x, header)
+    mas_file = prep_file(a_file, file_date, header)
     dict_create(mas_file, fir, las, file_date)
 
 
-def prep_file(a_file, n, d, header):
+def prep_file(a_file, n, header):
     """Read and split the csv on newline and comma and add to a list."""
     bar = []
     f = open(a_file, 'r').read()
     rows = f.split('\n')
     for i in rows:
-        new = i.split(',')
-        bar.append(new)
+        line = i.rstrip()
+        if line:
+            new = line.split(',')
+            bar.append(new)
     if header is True:
         del bar[0]
     for i in bar:
-        i[n] = datetime.datetime.strptime(
-            i[n], d).strftime(date_long)
+        x = parse(i[n])
+        x = x.strftime(date_long)
+        i[n] = x
+#        i[n] = datetime.datetime.strptime(
+#            i[n], d).strftime(date_long)
     return bar
 
 
@@ -121,7 +122,7 @@ if choice == 'y':
     master_file = input('Master filename >')
     mas_name = 0
     mas_date = 1
-    master_data = prep_file(master_file, mas_date, date_long, header=False)
+    master_data = prep_file(master_file, mas_date, header=False)
     master_dict(master_data, mas_name, mas_date)
 if choice == 'n':
     file_vars()
