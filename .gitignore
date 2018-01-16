@@ -1,9 +1,1 @@
-# Sensitive Files #
-###################
-*.csv
-*.xlsx
-
-
-# Personal Data #
-#################
-attendance_files/
+__pycache__
