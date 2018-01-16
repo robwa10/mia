@@ -4,8 +4,6 @@ from dateutil.tz import *
 import datetime
 import csv
 import xlsxwriter
-import answervalid as av
-
 
 # Global Variables
 date_short = "%m/%d/%y"
@@ -17,15 +15,23 @@ four_weeks = {}
 four_plus = {}
 master = {}
 
+def yes_no():
+    """Ask user Yes or No and validate the answer."""
+    message = '[Y/N] >'
+    answer = input(message).lower()
+    while answer not in ['y', 'n']:
+        answer = input("Choose [Y/N] >").lower()
+    return answer
+
 
 def file_vars():
-    """User inputs file formatting."""
+    """Allow user to specify which column each set of data is contained in."""
     a_file = input('Filename >')
     fir = int(input('First Name column (e.g. 1,2,3...) >')) - 1
     las = int(input('Last Name column (e.g. 1,2,3...) >')) - 1
     file_date = int(input('Date column (e.g. 1,2,3...) >')) - 1
     print('Does your file have a header?')
-    choice = av.yes_no()
+    choice = yes_no()
     if choice == 'y':
         header = True
     else:
@@ -35,24 +41,22 @@ def file_vars():
 
 
 def prep_file(a_file, n, header):
-    """Read and split the csv on newline and comma and add to a list."""
-    bar = []
+    """Read and split the csv on newline and comma then add to a list."""
+    new_list = []
     f = open(a_file, 'r').read()
     rows = f.split('\n')
     for i in rows:
         line = i.rstrip()
         if line:
             new = line.split(',')
-            bar.append(new)
+            new_list.append(new)
     if header is True:
-        del bar[0]
-    for i in bar:
+        del new_list[0]
+    for i in new_list:
         x = parse(i[n])
         x = x.strftime(date_long)
         i[n] = x
-#        i[n] = datetime.datetime.strptime(
-#            i[n], d).strftime(date_long)
-    return bar
+    return new_list
 
 
 def dict_create(a_list, fir, las, dt):
@@ -84,18 +88,18 @@ def compare():
             four_weeks[k] = m_date
         elif diff > 31:
             four_plus[k] = m_date
-        master[k] = m_date
+        date[k] = m_date
 
 
 def write_files():
-    """Write all files to be outputted."""
-    workbook = xlsxwriter.Workbook('MIA_Contact_List.xlsx')
+    """Write Excel file containg data for those needing to be contacted and
+    write a new master list with updated data."""
+    workbook = xlsxwriter.Workbook('Contact_List.xlsx')
     sheet1 = workbook.add_worksheet('Two_Weeks')
     sheet2 = workbook.add_worksheet('Four_Weeks')
     sheet3 = workbook.add_worksheet('Four_Plus_Weeks')
-    sheet4 = workbook.add_worksheet('Master_List')
+    sheet4 = workbook.add_worksheet('All_Data')
     w = csv.writer(open("master_list.csv", "w"))
-    m = open("master_list.txt", "w")
     write_xl(two_weeks, sheet1)
     write_xl(four_weeks, sheet2)
     write_xl(four_plus, sheet3)
@@ -103,10 +107,11 @@ def write_files():
     for k, v in sorted(master.items()):
         w.writerow([k, v])
     workbook.close()
-    return w, m
+    return w
 
 
 def write_xl(my_dict, sheet):
+    """Write Excel sheets."""
     row = 0
     col = 0
     for k, v in sorted(my_dict.items()):
@@ -115,26 +120,25 @@ def write_xl(my_dict, sheet):
         row += 1
 
 
-# User input of master file
-print("Do you have a master file?")
-choice = av.yes_no()
-if choice == 'y':
-    master_file = input('Master filename >')
-    mas_name = 0
-    mas_date = 1
-    master_data = prep_file(master_file, mas_date, header=False)
-    master_dict(master_data, mas_name, mas_date)
-if choice == 'n':
+# User input of master file.
+print(
+    "Do you have a master file previously outputted by this script "
+    "that is also in this directory?"
+    )
+if yes_no() == 'y':
+    master_dict(prep_file('master_list.csv', 1, header=False), 0, 1)
+else:
     file_vars()
 
-# Input of new data
+# Check if the user has a file containing new data.
 print("Load another file to update master list?")
-choice = av.yes_no()
-if choice == 'y':
+if yes_no() == 'y':
     file_vars()
     compare()
 else:
     compare()
 
+# Write the Excel file with the contact list data.
+# Write the new master_list.csv file.
 write_files()
-print("You're files are waiting for you.")
+print("Success! You're files are waiting for you.")
