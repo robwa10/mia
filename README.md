@@ -26,6 +26,8 @@ All input files (with the exception of master_list.csv outputted by this script)
 - Last Name column  
 - Date column  
 
+A sample master_list.csv and a second file, week_one.csv, are provided for you to test it's functionality.
+
 ## Script Purpose, Features and Functionality  
 
 ### Purpose
