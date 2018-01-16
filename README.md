@@ -54,5 +54,5 @@ The script is commented to aid in understanding it's functionality. However, her
 
 
 - File data is parsed and converted into a dictionary with the name as the key and date as the value.  
-- If the user inputs a second file that data is parsed and added to the dictionary. If a key already exists the value is updated to the most recent date.
+- If the user inputs a second file that data is parsed and added to the dictionary. If a key already exists the value is updated to the most recent date attended.
 - Dates in the dictionary are compared against today's date, appending the data to specific dicitionaries based on length between last attendance and today's date.
