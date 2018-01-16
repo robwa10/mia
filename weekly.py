@@ -88,7 +88,7 @@ def compare():
             four_weeks[k] = m_date
         elif diff > 31:
             four_plus[k] = m_date
-        date[k] = m_date
+        master[k] = m_date
 
 
 def write_files():
